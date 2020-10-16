@@ -1,0 +1,29 @@
+image: python:latest
+
+before_script:
+  - python --version
+  - make install-development
+
+stages:
+  - building
+  - publishing
+
+build package:
+  stage: building
+  script: make build
+  artifacts:
+    name: ${CI_JOB_NAME}-${CI_COMMIT_REF_NAME}
+    paths:
+      - dist
+    expire_in: 1 week
+  only:
+    - master
+    - tags
+
+deployment:
+  stage: publishing
+  dependencies:
+    - build package
+  script: make upload
+  only:
+    - master
