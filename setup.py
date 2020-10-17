@@ -6,7 +6,7 @@ from setuptools import setup
 
 setup(
     name="simplethread",
-    version="0.1.0",
+    version="0.1.1",
     author="Andrew Malchuk",
     author_email="andrew.malchuk@yandex.ru",
     description="Some useful utilities for Python's threading module",
@@ -29,6 +29,9 @@ setup(
         "Typing :: Typed"
     ],
     python_requires=">=3.6, <4.0",
-    py_modules=["simplethread"],
+    packages=["simplethread"],
+    package_data={
+        "simplethread": ["py.typed"]
+    },
     zip_safe=False
 )
