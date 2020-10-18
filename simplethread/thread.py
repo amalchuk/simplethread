@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
 
-"""
-Drop-in replacement for the ``thread`` module.
-"""
+from _thread import start_new_thread as start_new
 
-__all__ = ("allocate", "start_new")
-
-from _thread import allocate_lock as allocate, start_new_thread as start_new
+__all__ = ("start_new",)

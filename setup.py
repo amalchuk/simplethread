@@ -2,19 +2,28 @@
 # -*- coding: utf-8 -*-
 
 from pathlib import Path
-from setuptools import setup
 
-setup(
-    name="simplethread",
-    version="0.1.1",
-    author="Andrew Malchuk",
-    author_email="andrew.malchuk@yandex.ru",
-    description="Some useful utilities for Python's threading module",
-    long_description=Path(__file__).with_name("README.md").read_text("utf-8"),
-    long_description_content_type="text/markdown",
-    url="https://gitlab.com/amalchuk/simplethread",
-    license="MIT",
-    classifiers=[
+setuptools_attributes = {
+    "name": "simplethread",
+    "version": "0.1.2",
+    "author": "Andrew Malchuk",
+    "author_email": "andrew.malchuk@yandex.ru",
+    "description": "Some useful utilities for Python's threading module",
+    "long_description": Path(__file__).with_name("README.md").read_text("utf-8"),
+    "long_description_content_type": "text/markdown",
+    "license": "MIT",
+    "url": "https://gitlab.com/amalchuk/simplethread",
+    "packages": ["simplethread"],
+    "extras_require": {
+        "development": [
+            "coverage",
+            "isort",
+            "mypy",
+            "pytest",
+            "twine"
+        ]
+    },
+    "classifiers": [
         "Development Status :: 5 - Production/Stable",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
@@ -28,10 +37,18 @@ setup(
         "Programming Language :: Python :: Implementation :: CPython",
         "Typing :: Typed"
     ],
-    python_requires=">=3.6, <4.0",
-    packages=["simplethread"],
-    package_data={
+    "package_data": {
         "simplethread": ["py.typed"]
     },
-    zip_safe=False
-)
+    "include_package_data": True,
+    "python_requires": ">=3.6, <4.0",
+    "zip_safe": False,
+    "project_urls": {
+        "Bug Reports": "https://gitlab.com/amalchuk/simplethread/issues",
+        "Source": "https://gitlab.com/amalchuk/simplethread"
+    }
+}
+
+if __name__ == "__main__":
+    from setuptools import setup
+    setup(**setuptools_attributes)

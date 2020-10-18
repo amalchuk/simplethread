@@ -4,12 +4,12 @@ all: install clean
 
 install:
 	@echo "Installing the package"
-	@python setup.py install --quiet
+	@python setup.py install
 
 install-development:
 	@echo "Installing the package in the development mode"
-	@python -m pip install pip setuptools wheel --requirement requirements-dev.txt --upgrade --quiet --no-cache-dir
-	@python setup.py develop --quiet
+	@python -m pip install pip setuptools wheel --upgrade --force-reinstall --quiet --no-cache-dir
+	@pip install --editable .[development] --upgrade --force-reinstall --quiet --no-cache-dir
 
 build:
 	@echo "Building the package"

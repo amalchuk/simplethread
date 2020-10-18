@@ -4,7 +4,7 @@ from functools import update_wrapper
 from types import MethodType
 from typing import Any, Callable, Optional, Union
 
-from simplethread.thread import start_new
+from simplethread.thread import start_new as _
 
 __all__ = ("threaded",)
 
@@ -21,7 +21,7 @@ class threaded(object):
         update_wrapper(self, user_function)
 
     def __call__(self, *args: Any, **kwargs: Any) -> int:
-        return start_new(self.user_function, args, kwargs)
+        return _(self.user_function, args, kwargs)
 
     def __get__(self, instance: Any, owner: Optional[type] = None) -> Union["threaded", MethodType]:
         return self if instance is None else MethodType(self, instance)
