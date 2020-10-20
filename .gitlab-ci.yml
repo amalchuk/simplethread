@@ -4,6 +4,7 @@ before_script:
   - python -m pip install pip setuptools wheel --upgrade --force-reinstall --quiet --no-cache-dir
   - pip install poetry --quiet --no-cache-dir
   - poetry config virtualenvs.in-project true
+  - make install-development
 
 stages:
   - testing
