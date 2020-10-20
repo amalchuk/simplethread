@@ -13,7 +13,7 @@ def test_threaded() -> None:
         threaded(None)  # type: ignore
 
     decorated = threaded(add)
-    assert decorated.user_function == add
+    assert decorated.original_function == add
 
     thread_identifier = decorated("a", "b")
     assert isinstance(thread_identifier, int)

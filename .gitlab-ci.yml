@@ -1,8 +1,9 @@
 image: python:3.9-buster
 
 before_script:
-  - python --version
-  - make install-development
+  - python -m pip install pip setuptools wheel --upgrade --force-reinstall --quiet --no-cache-dir
+  - pip install poetry --quiet --no-cache-dir
+  - poetry config virtualenvs.in-project true
 
 stages:
   - testing
