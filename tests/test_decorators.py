@@ -13,16 +13,16 @@ def test_threaded() -> None:
         threaded(None)  # type: ignore
 
     decorated = threaded(add)
-    assert decorated.user_function == add
+    assert decorated.original_function == add
 
     thread_identifier = decorated("a", "b")
     assert isinstance(thread_identifier, int)
     assert thread_identifier > 0
 
-    class obj:
+    class test_object(object):
         @threaded
         def test(self) -> bool:
             return True
 
-    test = obj()
+    test = test_object()
     assert isinstance(test.test, MethodType)

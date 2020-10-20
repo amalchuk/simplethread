@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-"""
-Drop-in replacement for the ``thread`` module.
-"""
+from _thread import LockType
+from _thread import allocate_lock as allocate
+from _thread import start_new_thread as start
 
-__all__ = ("allocate", "start_new")
+__all__ = ("LockType", "allocate", "mutex", "start")
 
-from _thread import allocate_lock as allocate, start_new_thread as start_new
+mutex: LockType = allocate()
