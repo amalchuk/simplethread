@@ -15,7 +15,7 @@ class threaded(Generic[_F]):
     """
     A decorator to run a ``user_function`` in a separate thread.
     """
-    def __init__(self, user_function: _F, /, *args: Any, **kwargs: Any) -> None:
+    def __init__(self, user_function: _F) -> None:
         if not callable(user_function) and not hasattr(user_function, "__get__"):
             raise TypeError(f"{user_function!r} is not callable or a descriptor")
 
