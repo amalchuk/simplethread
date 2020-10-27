@@ -1,6 +1,6 @@
 [tool.poetry]
 name        = "simplethread"
-version     = "0.1.3b0"
+version     = "0.1.2.1"
 authors     = ["Andrew Malchuk <andrew.malchuk@yandex.ru>"]
 description = "Some useful utilities for Python's threading module"
 keywords    = ["python", "threading", "concurrency"]
