@@ -1,31 +1,34 @@
 # -*- coding: utf-8 -*-
 
-from functools import update_wrapper
-from types import MethodType
-from typing import Any, Callable, Generic, Optional, Type, TypeVar, Union
+from functools import wraps
+from typing import Any, Callable, TypeVar, cast
 
+from simplethread.thread import mutex
 from simplethread.thread import start
 
-__all__ = ("threaded",)
+__all__ = ("synchronized", "threaded")
 
 _F = TypeVar("_F", bound=Callable[..., Any])
 
 
-class threaded(Generic[_F]):
+def synchronized(user_function: _F) -> _F:
+    """
+    A decorator to synchronize a ``user_function``.
+    """
+    @wraps(user_function)
+    def wrapper(*args: Any, **kwargs: Any) -> Any:
+        with mutex:
+            return user_function(*args, **kwargs)
+
+    return cast(_F, wrapper)
+
+
+def threaded(user_function: _F) -> Callable[..., int]:
     """
     A decorator to run a ``user_function`` in a separate thread.
     """
-    def __init__(self, user_function: _F) -> None:
-        if not callable(user_function) and not hasattr(user_function, "__get__"):
-            raise TypeError(f"{user_function!r} is not callable or a descriptor")
+    @wraps(user_function)
+    def wrapper(*args: Any, **kwargs: Any) -> int:
+        return start(user_function, args, kwargs)
 
-        self.original_function: _F = user_function
-        update_wrapper(self, user_function)
-
-    def __call__(self, *args: Any, **kwargs: Any) -> int:
-        return start(self.original_function, args, kwargs)
-
-    def __get__(self, instance: Any, owner: Optional[Type[Any]] = None) -> Union["threaded[_F]", MethodType]:
-        # Bind a function to an object.
-        # Documentation: https://docs.python.org/3/howto/descriptor.html#functions-and-methods
-        return self if instance is None else MethodType(self, instance)
+    return wrapper
