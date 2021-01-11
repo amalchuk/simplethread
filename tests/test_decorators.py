@@ -1,31 +1,20 @@
 # -*- coding: utf-8 -*-
 
-from operator import iadd
-from threading import Event
-from time import sleep
-from typing import List
-
 from simplethread.decorators import synchronized
 from simplethread.decorators import threaded
 
 
+def multiply(a: float, b: float) -> float:
+    return a * b
+
+
 def test_synchronized() -> None:
-    initial_value: float = 0.0
-    decorated = synchronized(iadd)
-    assert decorated(initial_value, 1.0) == 1.0
+    initial_value: int = 5
+    decorated = synchronized(multiply)
+    assert decorated(initial_value, 3) == 15
 
 
 def test_threaded() -> None:
-    initial_value: float = 0.0
-    event = Event()
-
-    @threaded
-    def slow_method() -> None:
-        nonlocal initial_value, event
-        sleep(1.0)
-        event.set()
-        initial_value = initial_value + 1.0
-
-    slow_method()
-    event.wait()
-    assert initial_value == 1.0
+    initial_value: int = 3
+    decorated = threaded(multiply)
+    assert decorated(initial_value, 5).result() == 15
