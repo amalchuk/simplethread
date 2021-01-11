@@ -1,4 +1,4 @@
-.PHONY: all install install-development build upload test coverage clean
+.PHONY: all install install-development build update upload test coverage clean
 
 all: install clean
 
@@ -13,6 +13,11 @@ install-development:
 build:
 	@echo "Building the package"
 	@poetry build --format sdist --quiet --no-interaction
+
+update:
+	@echo "Downloading the latest versions of the dependencies"
+	@python -m pip install pip setuptools wheel --upgrade --force-reinstall --quiet --no-cache-dir
+	@poetry update --quiet --no-interaction
 
 upload:
 	@echo "Upload to the package registry"
