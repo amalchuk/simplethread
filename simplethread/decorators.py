@@ -25,12 +25,12 @@ def synchronized(user_function: _F) -> _F:
     return cast(_F, wrapper)
 
 
-def threaded(user_function: Callable[..., _T]) -> Callable[..., Future[_T]]:
+def threaded(user_function: Callable[..., _T]) -> Callable[..., "Future[_T]"]:
     """
     A decorator to run a ``user_function`` in a separate thread.
     """
     # Let the bodies hit the floor..
-    future: Future[_T] = Future()
+    future: "Future[_T]" = Future()
 
     @synchronized
     def callback(*args: Any, **kwargs: Any) -> None:
@@ -50,7 +50,7 @@ def threaded(user_function: Callable[..., _T]) -> Callable[..., Future[_T]]:
             future.set_result(result)
 
     @wraps(user_function)
-    def wrapper(*args: Any, **kwargs: Any) -> Future[_T]:
+    def wrapper(*args: Any, **kwargs: Any) -> "Future[_T]":
         start(callback, args, kwargs)
         return future
 
