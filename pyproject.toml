@@ -1,9 +1,9 @@
 [tool.poetry]
 name        = "simplethread"
-version     = "0.3.0"
+version     = "0.4.0"
 authors     = ["Andrew Malchuk <andrew.malchuk@yandex.ru>"]
 description = "Some useful utilities for Python's threading module"
-keywords    = ["asynchronous", "concurrency", "greenlet", "python", "threading"]
+keywords    = ["asynchronous", "concurrency", "python", "threading"]
 repository  = "https://gitlab.com/amalchuk/simplethread"
 readme      = "README.md"
 license     = "MIT"
