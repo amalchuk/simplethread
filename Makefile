@@ -2,22 +2,18 @@
 
 all: install clean
 
-install:
-	@echo "Installing the package"
-	@poetry install --no-dev --no-interaction
+update:
+	@echo "Downloading the latest versions of the dependencies"
+	@python -m pip install pip setuptools wheel --upgrade --force-reinstall --no-cache-dir
+	@poetry update --lock --no-interaction
 
-install-development:
-	@echo "Installing the package in the development mode"
+install: update
+	@echo "Installing the package"
 	@poetry install --no-root --no-interaction
 
 build:
 	@echo "Building the package"
 	@poetry build --format sdist --no-interaction
-
-update:
-	@echo "Downloading the latest versions of the dependencies"
-	@python -m pip install pip setuptools wheel --upgrade --force-reinstall --no-cache-dir
-	@poetry update --no-interaction
 
 upload:
 	@echo "Upload to the package registry"
