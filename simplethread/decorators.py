@@ -1,22 +1,36 @@
 # -*- coding: utf-8 -*-
 
-from concurrent.futures import Future
 from functools import wraps
-from typing import Any, Callable, TypeVar, cast
+from typing import Any, Callable, List, TypeVar, cast
 
-from simplethread.thread import mutex
-from simplethread.thread import start
+from greenlet import greenlet as _greenlet
 
-__all__ = ("synchronized", "threaded")
+from _thread import LockType as _LockType
+from _thread import allocate_lock as _allocate
+from _thread import start_new_thread as _start
+
+__all__: List[str] = ["asynchronous", "synchronized", "threaded"]
 
 _F = TypeVar("_F", bound=Callable[..., Any])
-_T = TypeVar("_T")
+
+
+def asynchronous(user_function: _F) -> _F:
+    """
+    A decorator to run a ``user_function`` asynchronously.
+    """
+    @wraps(user_function)
+    def wrapper(*args: Any, **kwargs: Any) -> Any:
+        return _greenlet(user_function).switch(*args, **kwargs)
+
+    return cast(_F, wrapper)
 
 
 def synchronized(user_function: _F) -> _F:
     """
     A decorator to synchronize a ``user_function``.
     """
+    mutex: _LockType = _allocate()
+
     @wraps(user_function)
     def wrapper(*args: Any, **kwargs: Any) -> Any:
         with mutex:
@@ -25,33 +39,12 @@ def synchronized(user_function: _F) -> _F:
     return cast(_F, wrapper)
 
 
-def threaded(user_function: Callable[..., _T]) -> Callable[..., "Future[_T]"]:
+def threaded(user_function: _F) -> Callable[..., int]:
     """
     A decorator to run a ``user_function`` in a separate thread.
     """
-    # Let the bodies hit the floor..
-    future: "Future[_T]" = Future()
-
-    @synchronized
-    def callback(*args: Any, **kwargs: Any) -> None:
-        nonlocal future
-        future.set_running_or_notify_cancel()
-
-        try:
-            # Let the bodies hit the floor..
-            result: _T = user_function(*args, **kwargs)
-
-        except BaseException as exception:
-            # Let the bodies hit the floor..
-            future.set_exception(exception)
-
-        else:
-            # Let the bodies hit the floor..
-            future.set_result(result)
-
     @wraps(user_function)
-    def wrapper(*args: Any, **kwargs: Any) -> "Future[_T]":
-        start(callback, args, kwargs)
-        return future
+    def wrapper(*args: Any, **kwargs: Any) -> Any:
+        return _start(user_function, args, kwargs)
 
     return wrapper

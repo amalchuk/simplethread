@@ -5,7 +5,7 @@ Simple Thread
 [![latest version][version]][pypi]
 [![python requires][pyversions]][pypi]
 
-Some useful utilities for Python's `threading` module.
+Some useful utilities for Python's `threading` and `greenlet` modules.
 
 Requirements
 ------------

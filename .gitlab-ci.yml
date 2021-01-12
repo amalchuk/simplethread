@@ -7,7 +7,7 @@ cache:
 
 before_script:
   - poetry config virtualenvs.in-project true
-  - make install-development
+  - make install
 
 stages:
   - testing
