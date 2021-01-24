@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from threading import Event
-from threading import BoundedSemaphore
 from time import sleep
 
-from simplethread import synchronized
-from simplethread import threaded
+from simplethread.decorators import synchronized
+from simplethread.decorators import threaded
 
 
 def test_synchronized() -> None:
@@ -20,27 +19,13 @@ def test_synchronized() -> None:
     assert multiply(2, 4) == 8
     assert multiply(4, 8) == 32
 
-    # Create a new lock object:
-    lock = BoundedSemaphore()
-
-    @synchronized(lock=lock)
-    def add(a: float, b: float) -> float:
-        """
-        Same as a + b.
-        """
-        return a + b
-
-    assert add(3, 6) == 9
-    assert add(4, 7) == 11
-    assert add(5, 8) == 13
-
 
 def test_threaded() -> None:
     initial_value: int = 3
     event: Event = Event()
 
     @threaded
-    def slow_method(a: float) -> None:
+    def slow_method(a: int) -> None:
         nonlocal initial_value, event
         sleep(0.25)
         initial_value = a * initial_value

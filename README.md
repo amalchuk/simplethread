@@ -9,7 +9,7 @@ Some useful utilities for Python's `threading` module.
 
 Requirements
 ------------
-Python 3.8+
+Python 3.6+
 
 Installation
 ------------
