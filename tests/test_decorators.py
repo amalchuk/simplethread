@@ -9,7 +9,7 @@ from simplethread.decorators import threaded
 
 def test_synchronized() -> None:
     @synchronized
-    def multiply(a: float, b: float) -> float:
+    def multiply(a: float, b: float, /) -> float:
         """
         Same as a × b.
         """
@@ -25,7 +25,7 @@ def test_threaded() -> None:
     event: Event = Event()
 
     @threaded
-    def slow_method(a: int) -> None:
+    def slow_method(a: int, /) -> None:
         nonlocal initial_value, event
         sleep(0.25)
         initial_value = a * initial_value

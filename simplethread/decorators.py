@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
 
 from functools import wraps
-from typing import Any, Callable, List, TypeVar, cast
+from typing import Any, Callable, Final, List, TypeVar, cast
 
 from _thread import LockType as _MutexType
 from _thread import allocate_lock as _create_mutex
 from _thread import start_new_thread as _start_thread
 
-__all__: List[str] = ["synchronized", "threaded"]
+__all__: Final[List[str]] = ["synchronized", "threaded"]
 
 _F = TypeVar("_F", bound=Callable[..., Any])
 
 
-def synchronized(user_function: _F) -> _F:
+def synchronized(user_function: _F, /) -> _F:
     """
     A decorator to synchronize a ``user_function``.
     """
@@ -26,7 +26,7 @@ def synchronized(user_function: _F) -> _F:
     return cast(_F, wrapper)
 
 
-def threaded(user_function: _F) -> Callable[..., int]:
+def threaded(user_function: _F, /) -> Callable[..., int]:
     """
     A decorator to run a ``user_function`` in a separate thread.
     """
