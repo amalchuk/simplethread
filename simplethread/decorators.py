@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from functools import update_wrapper
 from functools import wraps
 from typing import Any, Callable, Final, List, TypeVar, cast
 
@@ -30,8 +31,12 @@ def threaded(user_function: _F, /) -> Callable[..., int]:
     """
     A decorator to run a ``user_function`` in a separate thread.
     """
-    @wraps(user_function)
-    def wrapper(*args: Any, **kwargs: Any) -> int:
-        return _start_thread(user_function, args, kwargs)
+    def callback(*args: Any, **kwargs: Any) -> None:  # pragma: no cover
+        try:
+            user_function(*args, **kwargs)
+        finally:
+            # Exit from the interpreter immediately:
+            raise SystemExit from None
 
-    return wrapper
+    run_in_thread: Callable[..., int] = lambda *args, **kwargs: _start_thread(callback, args, kwargs)
+    return update_wrapper(run_in_thread, user_function)
